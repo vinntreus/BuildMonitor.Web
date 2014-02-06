@@ -1,7 +1,7 @@
 var expect = require("chai").expect;
 var db = {
-	getBuildData : function(){
-		return [{
+    getBuildData : function(){
+        return [{
               Start: "2014-02-06T14:06:55.9479979+01:00",
               Time: 1842,
               Solution: {
@@ -50,18 +50,18 @@ var db = {
                 }
               ]
             }];
-	}
+    }
 };
 var app = require("../app.js")(db);
 var request = require("supertest");
 
 
 describe('index', function () {
-	describe('GET', function () {
-		it('should return html', function (done) {
-			request(app)
-				.get("/")
-				.expect(200, done);
-		});
-	});	
+    describe('GET', function () {
+        it('should return html', function (done) {
+            request(app)
+                .get("/")
+                .expect(200, done);
+        });
+    }); 
 });

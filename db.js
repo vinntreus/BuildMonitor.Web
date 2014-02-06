@@ -1,6 +1,6 @@
 var db = {
-	getBuildData : function(){
-		return [{
+    getBuildData : function(){
+        return [{
               Start: "2014-02-06T14:06:55.9479979+01:00",
               Time: 1842,
               Solution: {
@@ -49,7 +49,7 @@ var db = {
                 }
               ]
             }];
-	}
+    }
 };
 
 module.exports = db;
