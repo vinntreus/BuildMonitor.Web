@@ -1,0 +1,20 @@
+Features
+- Display graph
+	where y-axis is time spent compiling
+	      x-axis is time when compiling occured
+	- based on all data
+	- per year (aggregated per month)
+	- per month (aggregated per day)
+	- per week (aggregated per day)
+	- per day (exact time)
+- Key numbers
+	- Total time spent compiling
+	  - per year
+	  - per month
+	  - per day
+- Upload file
+	- display graph
+	- attach data to my profile
+- Create profile
+- Login
+ 
