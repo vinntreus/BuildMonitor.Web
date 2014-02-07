@@ -3,4 +3,18 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
-  p= buildData
+  div#graph
+
+  script(src="/javascripts/dygraph-combined.js")
+  script.
+    var data = !{JSON.stringify(buildData)};
+    var d = data.map(function(item){
+      return [
+        new Date(item[0]),
+        item[1]
+      ];
+    });
+    var graphElement = document.getElementById("graph");
+    var graph = new Dygraph(graphElement, d, {
+      labels: [ "Date", "Compile time" ]
+    });
