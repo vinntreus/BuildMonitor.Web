@@ -1,1 +1,24 @@
-Buildmonitor will appear here
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Build Monitor</title>
+    <link href="buildmonitor.css" rel="stylesheet" />
+</head>
+<body>
+    <header>
+        <h1>Build Monitor Analyzer</h1>
+    </header>
+    <main class="buildmonitor">
+        <textarea placeholder="Input buildtimes.json here" required></textarea>
+        <div class="stats"></div>
+        <div class="chart">
+            <header>
+                <h2>Total minutes spent building projects</h2>
+            </header>
+            <canvas width="500" height="300"></canvas>
+        </div>
+    </main>
+    <script src="Chart.min.js"></script>
+    <script src="buildmonitor.js"></script>
+</body>
+</html>
