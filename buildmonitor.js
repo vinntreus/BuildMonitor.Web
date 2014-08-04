@@ -47,20 +47,26 @@
         html.push('<thead>');
         html.push('<tr>');
         html.push('<th>Date</th>');
-        html.push('<th>Builds</th>');
-        html.push('<th>Time</th>');
+        html.push('<th>Total project builds</th>');
+        html.push('<th>Total project build time</th>');
+        html.push('<th>Average project build time</th>');
         html.push('</tr>');
         html.push('</thead>');
 
 
         html.push('<tbody>');
 
-        Object.keys(stats.totalTimeByDate).forEach(function (year) {
-            Object.keys(stats.totalTimeByDate[year]).forEach(function (month) {
+        Object.keys(stats.statsByDate).forEach(function (year) {
+            Object.keys(stats.statsByDate[year]).forEach(function (month) {
+                var totalRun = stats.statsByDate[year][month].totalRun,
+                    totalTime = stats.statsByDate[year][month].totalTime,
+                    averageTime = totalTime / totalRun;
+
                 html.push('<tr>');
                 html.push('<th>' + getDateDisplayName(month - 1, year) + '</th>');
-                html.push('<td>' + 'N/A' + '</td>');
-                html.push('<td>' + getTimeDisplayName(stats.totalTimeByDate[year][month]) + '</td>');
+                html.push('<td>' + totalRun + '</td>');
+                html.push('<td>' + getTimeDisplayName(totalTime) + '</td>');
+                html.push('<td>' + getTimeDisplayName(averageTime) + '</td>');
                 html.push('</tr>');
             });
         });
@@ -72,6 +78,7 @@
         html.push('<th>Total</th>');
         html.push('<td>' + stats.totalRun + '</td>');
         html.push('<td>' + getTimeDisplayName(stats.totalTime) + '</td>');
+        html.push('<td>' + getTimeDisplayName(stats.totalTime / stats.totalRun) + '</td>');
         html.push('</tr>');
         html.push('</tfoot>');
         html.push('</table>');
@@ -84,12 +91,13 @@
                 roundedMinutes = Math.round(minutes),
                 roundedMinutesWithUnit = roundedMinutes + ' min';
 
-            return !!milliseconds ? roundedMinutesWithUnit : '-';
-        }
-
-        function getDateDisplayName(month, year) {
-            var monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-            return monthNames[month] + '/' + year;
+            if (!milliseconds) {
+                return '-';
+            } else if (seconds < 60) {
+                return Math.round(seconds) + ' seconds';
+            } else {
+                return roundedMinutesWithUnit;
+            }
         }
     }
 
@@ -107,16 +115,15 @@
                 pointHighlightFill: '#000',
                 pointHighlightStroke: 'hsla(126, 45%, 66%, 1)',
                 data: []
-            },
-            monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            };
 
-        Object.keys(stats.totalTimeByDate).forEach(function (year) {
-            Object.keys(stats.totalTimeByDate[year]).forEach(function (month) {
-                var milliseconds = stats.totalTimeByDate[year][month],
+        Object.keys(stats.statsByDate).forEach(function (year) {
+            Object.keys(stats.statsByDate[year]).forEach(function (month) {
+                var milliseconds = stats.statsByDate[year][month].totalTime,
                     seconds = milliseconds / 1000,
                     minutes = seconds / 60,
                     roundedMinutes = Math.round(minutes),
-                    label = monthNames[month - 1] + '/' + year;
+                    label = getDateDisplayName(month - 1, year);
 
                 lineChartData.labels.push(label);
                 dataset.data.push(roundedMinutes);
@@ -126,5 +133,10 @@
         lineChartData.datasets.push(dataset);
 
         return lineChartData;
+    }
+
+    function getDateDisplayName(month, year) {
+        var monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        return monthNames[month] + '/' + year;
     }
 }(this));

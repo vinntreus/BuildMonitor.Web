@@ -45,23 +45,24 @@ header {
 }
 
 .buildmonitor textarea {
-    margin-right: 5px;
-    height: 0;
+    height: 50px;
+    margin-bottom: 10px;
 }
 
 .buildmonitor .stats {
-    margin-left: 5px;
     overflow: hidden;
     overflow-y: scroll;
     height: 200px;
+    display: block;
 }
 
 .buildmonitor textarea:invalid {
-    height: 200px;
+    height: 250px;
 }
 
     .buildmonitor textarea:invalid ~ .stats {
         height: 0;
+        display: none;
     }
 
 .buildmonitor .stats table {

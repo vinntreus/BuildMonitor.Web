@@ -1,5 +1,5 @@
 ﻿(function (global) {
-    global.addEventListener('message', function(event) {
+    global.addEventListener('message', function (event) {
         var stats = getSolutionAndProjectStats(event.data);
         global.postMessage(stats);
     });
@@ -64,7 +64,7 @@
     function getItemStats(events) {
         var totalRun = 0,
             totalTime = 0,
-            totalTimeByDate = {};
+            statsByDate = {};
 
         events.forEach(function (event) {
             var start = new Date(event.start),
@@ -74,44 +74,52 @@
             totalRun += 1;
             totalTime += event.time;
 
-            if (!totalTimeByDate[year]) {
-                totalTimeByDate[year] = {};
+            if (!statsByDate[year]) {
+                statsByDate[year] = {};
                 for (var i = 1; i <= 12; i++) {
-                    totalTimeByDate[year][i] = 0;
+                    statsByDate[year][i] = {
+                        totalTime: 0,
+                        totalRun: 0
+                    };
                 }
             }
 
-            totalTimeByDate[year][month] += event.time;
+            statsByDate[year][month].totalTime += event.time;
+            statsByDate[year][month].totalRun += 1;
         });
 
         return {
             totalRun: totalRun,
             totalTime: totalTime,
             averageTime: totalTime / totalRun,
-            totalTimeByDate: totalTimeByDate
+            statsByDate: statsByDate
         };
     }
 
     function getItemsStats(items) {
         var totalRun = 0,
             totalTime = 0,
-            totalTimeByDate = {},
+            statsByDate = {},
             i = 0;
 
         items.forEach(function (item) {
             totalRun += item.stats.totalRun;
             totalTime += item.stats.totalTime;
 
-            Object.keys(item.stats.totalTimeByDate).forEach(function (year) {
-                if (!totalTimeByDate[year]) {
-                    totalTimeByDate[year] = {};
+            Object.keys(item.stats.statsByDate).forEach(function (year) {
+                if (!statsByDate[year]) {
+                    statsByDate[year] = {};
                     for (i = 1; i <= 12; i++) {
-                        totalTimeByDate[year][i] = 0;
+                        statsByDate[year][i] = {
+                            totalTime: 0,
+                            totalRun: 0
+                        };
                     }
                 }
 
                 for (i = 1; i <= 12; i++) {
-                    totalTimeByDate[year][i] += item.stats.totalTimeByDate[year][i];
+                    statsByDate[year][i].totalTime += item.stats.statsByDate[year][i].totalTime;
+                    statsByDate[year][i].totalRun += item.stats.statsByDate[year][i].totalRun;
                 }
             });
         });
@@ -120,7 +128,7 @@
             totalRun: totalRun,
             totalTime: totalTime,
             averageTime: totalTime / totalRun,
-            totalTimeByDate: totalTimeByDate
+            statsByDate: statsByDate
         };
     }
 }(this));
